@@ -1,7 +1,21 @@
 #This is text to Morse Code converter
+
+# Morse Code rules:
+# The space between symbols(dots and dashes) of the same letter is 1 time unit.
+# The space between letters is 3 time units.
+# The space between words is 7 time units.
+# A dash is the length of 3 dots
+
 import winsound
 import time
 
+# Specifying time lengths and beep frequency
+dot = 150 #in milliseconds
+dash = 450 #in milliseconds
+wait_time_unit = 0.15 #in seconds
+freq = 1700 #in HZ
+
+# Morse Code dictionary
 mc_dict = {}
 mc_dict['a'] = '*-'
 mc_dict['b'] = '-***'
@@ -39,37 +53,32 @@ mc_dict['6'] = '-****'
 mc_dict['7'] = '--***'
 mc_dict['8'] = '---**'
 mc_dict['9'] = '----*'
+mc_dict['.'] = '*-*-*-'
+mc_dict[','] = '--**--'
+mc_dict['!'] = '-*-*--'
+mc_dict['?'] = '**--**'
 
-# The space between symbols(dots and dashes) of the same letter is 1 time unit. 
-# The space between letters is 3 time units. 
-# The space between words is 7 time units.
-# A dash is the length of 3 dots
-
-dot = 150
-dash = 450
-wait_unit = 0.15
-freq = 1700
-
-# winsound.Beep(1700, dot)
-# time.sleep(wait_unit)
-# winsound.Beep(1700, dash)
-
+#function that plays one character
 def play_function(input_string):
     for char in input_string:
         if (char == '*'):
             winsound.Beep(freq,dot)
         else:
             winsound.Beep(freq,dash)
-        time.sleep(wait_unit)
+        time.sleep(wait_time_unit)
 
 
-text_to_convert = input('Hi there! \n Please input your word: ')
-words_to_play = text_to_convert.split()
+text_to_convert = input('Hi there! \n Welcome to Greg\'s Morse Code encoder \n Please input your text: ')
+words_to_play = text_to_convert.lower().split()
 
 for item in words_to_play:
     for char in item:
-        play_function(mc_dict[char])
-        time.sleep(wait_unit*2)
-    time.sleep(wait_unit*4)
+        try:
+            play_function(mc_dict[char])
+            time.sleep(wait_time_unit*2)
+        except: # this is in case we don't have a character in our Morse Code dictionary
+            print(f'Character {char} doesn\'t exist')
+            pass
+    time.sleep(wait_time_unit*4)
     print('END OF WORD')
-
+print('END OF TEXT')
